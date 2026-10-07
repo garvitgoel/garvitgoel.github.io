@@ -1,2 +1,2 @@
 # garvitgoel.github.io
-garvit.io website
+sozo.cc website
