@@ -1,0 +1,1092 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sozo Chemicals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a narrow label gutter beside one wide content column. The hero's
+   chromatogram runs the full width, and its time axis is the rule that closes the hero. */
+:root {
+  /* colour */
+  --paper: #F2F5F8;
+  --surface: #FFFFFF;
+  --ink: #0D1B2A;
+  --ink-soft: #46586B;
+  --line: #CBD5DF;
+  --vitriol: #1650D0;          /* copper sulfate blue */
+  --vitriol-deep: #0F3FAA;
+  --on-vitriol: #FFFFFF;
+  --vitriol-wash: #E3EBFA;
+  --amber: #9A5B00;            /* amber glass, used once, for the specimen stamp */
+  --shadow: rgba(13, 27, 42, 0.28);
+  --band: #0D1B2A;
+  --band-ink: #E8EEF5;
+  --band-soft: #A3B4C6;
+  --band-line: #2A3B4E;
+  --band-field: #142435;
+  --band-accent: #7FB0FF;
+  --band-accent-deep: #A8CAFF;
+  --on-band-accent: #071220;
+
+  /* type */
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --fs-hero: clamp(2.25rem, 1.2rem + 4.4vw, 4.25rem);
+  --fs-h2: clamp(1.625rem, 1.2rem + 1.9vw, 2.5rem);
+  --fs-h3: 1.125rem;
+  --fs-body: 1.0625rem;
+  --fs-small: 0.9375rem;
+  --fs-mono: 0.75rem;
+
+  /* space */
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --section: clamp(3.5rem, 8vw, 6.5rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0A121B;
+    --surface: #111C28;
+    --ink: #E8EEF5;
+    --ink-soft: #9BADBF;
+    --line: #263647;
+    --vitriol: #74A7FF;
+    --vitriol-deep: #9BC0FF;
+    --on-vitriol: #071220;
+    --vitriol-wash: #0F1B2C;
+    --amber: #E5A742;
+    --shadow: rgba(0, 0, 0, 0.6);
+    --band: #111C28;
+    --band-ink: #E8EEF5;
+    --band-soft: #A3B4C6;
+    --band-line: #2A3B4E;
+    --band-field: #0A121B;
+    --band-accent: #7FB0FF;
+    --band-accent-deep: #A8CAFF;
+    --on-band-accent: #071220;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0A121B;
+  --surface: #111C28;
+  --ink: #E8EEF5;
+  --ink-soft: #9BADBF;
+  --line: #263647;
+  --vitriol: #74A7FF;
+  --vitriol-deep: #9BC0FF;
+  --on-vitriol: #071220;
+  --vitriol-wash: #0F1B2C;
+  --amber: #E5A742;
+  --shadow: rgba(0, 0, 0, 0.6);
+  --band: #111C28;
+  --band-ink: #E8EEF5;
+  --band-soft: #A3B4C6;
+  --band-line: #2A3B4E;
+  --band-field: #0A121B;
+  --band-accent: #7FB0FF;
+  --band-accent-deep: #A8CAFF;
+  --on-band-accent: #071220;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  /* working roles, re-pointed inside .band */
+  --fg: var(--ink);
+  --fg-soft: var(--ink-soft);
+  --rule: var(--line);
+  --acc: var(--vitriol);
+  --acc-hover: var(--vitriol-deep);
+  --on-acc: var(--on-vitriol);
+  margin: 0;
+  background: var(--paper);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; border-radius: 2px; }
+[id] { scroll-margin-top: 5rem; }
+
+.wrap {
+  width: 100%;
+  max-width: 72.5rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 30;
+  background: var(--acc);
+  color: var(--on-acc);
+  padding: 0.5rem 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip:focus { top: 0.5rem; }
+
+/* ---------- type roles ---------- */
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+h2 {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+h3 {
+  font-family: var(--font-display);
+  font-stretch: 106%;
+  font-weight: 650;
+  font-size: var(--fs-h3);
+  line-height: 1.3;
+}
+.lede {
+  font-size: 1.125rem;
+  color: var(--fg-soft);
+  max-width: 39rem;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.875rem;
+  padding: 0.625rem 1.25rem;
+  border: 1.5px solid transparent;
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn-primary { background: var(--acc); color: var(--on-acc); }
+.btn-primary:hover { background: var(--acc-hover); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--fg); }
+.btn-ghost:hover { color: var(--acc); border-color: var(--acc); }
+.btn-small { min-height: 2.5rem; padding: 0.5rem 1rem; }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 4rem;
+}
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--fg);
+  text-decoration: none;
+  min-width: 0;
+}
+.wordmark svg { width: 1.75rem; height: 1.75rem; flex: none; }
+.wm-ring { fill: none; stroke: currentColor; stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; }
+.wm-dot { fill: var(--acc); }
+.wm-name {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.wm-sub { color: var(--fg-soft); letter-spacing: 0.16em; font-size: 0.6875rem; }
+.nav { display: flex; align-items: center; gap: 1.75rem; }
+.nav-link {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--fg);
+}
+.nav-link:hover { color: var(--acc); }
+.menu-toggle { display: none; }
+
+/* ---------- hero ---------- */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+.hero-copy {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-block: clamp(2.5rem, 6vw, 4.75rem) 7.75rem;
+}
+.eyebrow { color: var(--fg-soft); }
+h1 {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 750;
+  font-size: var(--fs-hero);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.hero-text { font-size: 1.1875rem; color: var(--fg-soft); max-width: 33rem; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.trace {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  min-height: 24rem;
+}
+.trace svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.trace figcaption {
+  position: absolute;
+  top: clamp(2.5rem, 6vw, 4.75rem);
+  right: 0;
+  max-width: 11.5rem;
+  text-align: right;
+  color: var(--fg-soft);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.tr-area { fill: color-mix(in srgb, var(--acc) 11%, transparent); }
+.tr-line { fill: none; stroke: var(--acc); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.tr-axis, .tr-tick { stroke: var(--fg); stroke-width: 1.5; }
+.tr-dot { fill: var(--paper); stroke: var(--acc); stroke-width: 2; }
+.tr-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--fg-soft);
+  font-variant-numeric: tabular-nums;
+}
+.tr-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: var(--fg);
+}
+.trace.is-drawing .tr-line {
+  stroke-dasharray: 1;
+  animation: tr-draw 1.9s cubic-bezier(0.65, 0, 0.25, 1) both;
+}
+.trace.is-drawing .tr-area { animation: tr-fade 1s 1s ease both; }
+.trace.is-drawing .tr-dot, .trace.is-drawing .tr-label { animation: tr-fade 0.5s 1.5s ease both; }
+@keyframes tr-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes tr-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- sections ---------- */
+.section { padding-block: var(--section); }
+.section + .section.ruled { border-top: 1px solid var(--rule); }
+.wash { background: var(--vitriol-wash); }
+.split {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  row-gap: 1rem;
+}
+.label { color: var(--fg-soft); padding-top: 0.625rem; }
+.label::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.625rem;
+  background: var(--acc);
+}
+.body { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+.body-block { margin-top: 1.5rem; }
+
+/* what we make */
+.offers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.offer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1.125rem;
+  border-top: 2px solid var(--fg);
+  min-width: 0;
+}
+.offer .mono { color: var(--acc); }
+.offer p:last-child { color: var(--fg-soft); font-size: var(--fs-small); }
+
+/* process flow */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 2.25rem 1.25rem 0 0;
+  min-width: 0;
+}
+.step::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--acc);
+}
+.step::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--acc);
+  border-radius: 50%;
+  background: var(--vitriol-wash);
+}
+.step:last-child::before { display: none; }
+.step:last-child::after { background: var(--acc); }
+.step .mono { color: var(--acc); font-variant-numeric: tabular-nums; }
+.step p:last-child { color: var(--fg-soft); font-size: var(--fs-small); }
+
+/* label / value rows */
+.rows { display: flex; flex-direction: column; }
+.row {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  column-gap: 1.5rem;
+  row-gap: 0.25rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--rule);
+}
+.row:last-child { border-bottom: 1px solid var(--rule); }
+.row dt {
+  font-family: var(--font-display);
+  font-stretch: 106%;
+  font-weight: 650;
+  line-height: 1.35;
+}
+.row dd { color: var(--fg-soft); }
+.rows-stacked .row { grid-template-columns: minmax(0, 1fr); }
+.rows-wide { max-width: 46rem; }
+
+/* quality */
+.quality-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+.coa {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  min-width: 0;
+  padding: clamp(1.125rem, 2.5vw, 1.75rem);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  box-shadow: 0 22px 44px -30px var(--shadow);
+}
+.coa-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--fg);
+}
+.coa-head .mono { color: var(--fg-soft); }
+.coa-title {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+.stamp {
+  flex: none;
+  padding: 0.25rem 0.5rem;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  transform: rotate(-5deg);
+}
+.coa-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+.coa-meta dt { color: var(--fg-soft); letter-spacing: 0.1em; }
+.coa-meta dd {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.table-scroll { overflow-x: auto; }
+.coa table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.coa th, .coa td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5625rem 0.75rem 0.5625rem 0;
+  border-top: 1px solid var(--rule);
+}
+.coa th:last-child, .coa td:last-child { padding-right: 0; }
+.coa th { color: var(--fg-soft); font-weight: 500; letter-spacing: 0.1em; }
+.coa td { font-variant-numeric: tabular-nums; }
+.coa td:last-child { font-family: var(--font-mono); white-space: nowrap; }
+.coa-note { font-size: 0.8125rem; color: var(--fg-soft); }
+
+/* ---------- contact band ---------- */
+.band {
+  --fg: var(--band-ink);
+  --fg-soft: var(--band-soft);
+  --rule: var(--band-line);
+  --acc: var(--band-accent);
+  --acc-hover: var(--band-accent-deep);
+  --on-acc: var(--on-band-accent);
+  background: var(--band);
+  color: var(--fg);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+.contact-copy { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+.contact-copy .label { padding-top: 0; }
+.email-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.875rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--rule);
+}
+.email-line .mono { color: var(--fg-soft); }
+.addr { font-family: var(--font-mono); font-size: 1.0625rem; user-select: all; overflow-wrap: anywhere; }
+.link-btn {
+  padding: 0.25rem 0;
+  border: 0;
+  border-bottom: 1.5px solid var(--acc);
+  background: none;
+  color: var(--acc);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+}
+.link-btn:hover { color: var(--acc-hover); border-color: var(--acc-hover); }
+.status { font-size: var(--fs-small); color: var(--fg-soft); }
+.contact-form { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.field { display: flex; flex-direction: column; gap: 0.375rem; min-width: 0; }
+.field-wide { grid-column: 1 / -1; }
+.field label { color: var(--fg-soft); letter-spacing: 0.08em; }
+.field input, .field textarea, .enquiry-out textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 0.6875rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--band-field);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.field textarea, .enquiry-out textarea { resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--fg-soft); opacity: 0.65; }
+.field input:focus-visible, .field textarea:focus-visible, .enquiry-out textarea:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
+  border-color: var(--acc);
+}
+.form-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+.form-foot p { flex: 1 1 14rem; font-size: 0.8125rem; color: var(--fg-soft); }
+.enquiry-out {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+.enquiry-out p { color: var(--fg-soft); font-size: var(--fs-small); }
+.enquiry-out textarea { font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.55; }
+.out-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+
+/* ---------- footer ---------- */
+.site-footer { padding-block: 2.5rem; }
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+}
+.footer-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--fg-soft);
+  font-size: 0.8125rem;
+}
+
+/* ---------- narrower screens ---------- */
+@media (max-width: 62rem) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .label { padding-top: 0; }
+}
+@media (max-width: 56rem) {
+  .menu-toggle { display: inline-flex; }
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.5rem var(--gutter) 1.25rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav.is-open { display: flex; }
+  .nav .nav-link { padding-block: 0.875rem; border-bottom: 1px solid var(--rule); font-size: 1rem; }
+  .nav .btn { margin-top: 1rem; }
+
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-copy { padding-bottom: 1.5rem; }
+  .trace { grid-column: 1; grid-row: 2; min-height: 14rem; }
+  .trace figcaption { top: 0.25rem; left: 0; right: auto; max-width: 58%; text-align: left; }
+
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .step { padding: 0 0 1.75rem 2.25rem; }
+  .step::before { top: 0; bottom: 0; left: 6px; right: auto; width: 2px; height: auto; }
+  .step::after { top: 0.25rem; }
+  .step:last-child { padding-bottom: 0; }
+
+  .quality-grid, .contact-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 40rem) {
+  .offers, .form { grid-template-columns: minmax(0, 1fr); }
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .hero-text { font-size: 1.0625rem; }
+  .cta-row .btn { flex: 1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trace.is-drawing .tr-line, .trace.is-drawing .tr-area,
+  .trace.is-drawing .tr-dot, .trace.is-drawing .tr-label { animation: none; }
+  .btn { transition: none; }
+}
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="wordmark" href="#top" aria-label="Sozo Chemicals, back to top">
+      <svg viewBox="0 0 28 28" aria-hidden="true">
+        <polygon class="wm-ring" points="14,3 23.5,8.5 23.5,19.5 14,25 4.5,19.5 4.5,8.5"/>
+        <line class="wm-ring" x1="8.6" y1="10.8" x2="8.6" y2="17.2"/>
+        <circle class="wm-dot" cx="23.5" cy="8.5" r="3.6"/>
+      </svg>
+      <span class="wm-name">Sozo</span>
+      <span class="wm-sub mono">Chemicals</span>
+    </a>
+    <button class="menu-toggle btn btn-ghost btn-small" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a class="nav-link" href="#make">What we make</a>
+      <a class="nav-link" href="#process">How it works</a>
+      <a class="nav-link" href="#quality">Quality</a>
+      <a class="nav-link" href="#shipping">Shipping</a>
+      <a class="btn btn-primary btn-small" href="#contact">Request a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow mono">Specialty chemical manufacturer · India</p>
+        <h1>Specialty chemicals, made to spec.</h1>
+        <p class="hero-text">Sozo Chemicals makes specialty chemicals in small, documented batches. We manufacture in India and supply customers across India and abroad.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#contact">Request a quote</a>
+          <a class="btn btn-ghost" href="#process">See how it works</a>
+        </div>
+      </div>
+      <figure class="trace" id="trace">
+        <svg id="trace-svg" role="img" aria-label="Illustrative chromatogram over 12 minutes: one tall product peak at about 9.4 minutes and a few small impurity peaks close to the baseline.">
+          <path class="tr-area" id="tr-area" d=""/>
+          <path class="tr-line" id="tr-line" pathLength="1" d=""/>
+          <line class="tr-axis" id="tr-axis" x1="0" y1="0" x2="0" y2="0"/>
+          <g id="tr-ticks"></g>
+          <circle class="tr-dot" id="tr-dot" cx="0" cy="0" r="4"/>
+          <text class="tr-label" id="tr-label" x="0" y="0" text-anchor="end">Product</text>
+        </svg>
+        <figcaption class="mono">Illustrative chromatogram. One product peak, impurities near the baseline.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="make">
+    <div class="wrap split">
+      <p class="label mono">What we make</p>
+      <div class="body">
+        <h2>Everything we sell, we make ourselves.</h2>
+        <p class="lede">We are a manufacturer. There is no trading desk and no relabelled stock, so the range stays focused and your questions go to the people who made the batch.</p>
+        <ul class="offers body-block">
+          <li class="offer">
+            <p class="mono">Regular range</p>
+            <h3>Catalogue products</h3>
+            <p>A focused range of specialty chemicals, made on a regular schedule to a fixed specification.</p>
+          </li>
+          <li class="offer">
+            <p class="mono">Made to order</p>
+            <h3>Custom batches</h3>
+            <p>Need a different grade, purity or pack size? Send us the specification and we will tell you plainly whether we can make it.</p>
+          </li>
+          <li class="offer">
+            <p class="mono">Small packs</p>
+            <h3>Trial quantities</h3>
+            <p>Start with a small order, test it in your own process, then move to repeat batches.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash" id="process">
+    <div class="wrap split">
+      <p class="label mono">How it works</p>
+      <div class="body">
+        <h2>From enquiry to dispatch in five steps.</h2>
+        <ol class="flow body-block">
+          <li class="step">
+            <p class="mono">01</p>
+            <h3>Enquiry</h3>
+            <p>Tell us the product, the grade and the quantity you need.</p>
+          </li>
+          <li class="step">
+            <p class="mono">02</p>
+            <h3>Quote</h3>
+            <p>We confirm the specification, pack size, price and lead time in writing.</p>
+          </li>
+          <li class="step">
+            <p class="mono">03</p>
+            <h3>Batch</h3>
+            <p>Your material is made as an identified batch with its own lot number.</p>
+          </li>
+          <li class="step">
+            <p class="mono">04</p>
+            <h3>Analysis</h3>
+            <p>The batch is tested against the agreed specification before release.</p>
+          </li>
+          <li class="step">
+            <p class="mono">05</p>
+            <h3>Dispatch</h3>
+            <p>It is packed, labelled and shipped with its documents.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="quality">
+    <div class="wrap split">
+      <p class="label mono">Quality</p>
+      <div class="body">
+        <h2>Every batch arrives with its paperwork.</h2>
+        <p class="lede">You should not have to take our word for what is in the pack. Each lot is tested before release and ships with the documents your QC and stores teams ask for.</p>
+        <div class="quality-grid body-block">
+          <dl class="rows rows-stacked">
+            <div class="row">
+              <dt>Certificate of Analysis</dt>
+              <dd>Test results for your specific lot, set against the agreed specification.</dd>
+            </div>
+            <div class="row">
+              <dt>Safety Data Sheet</dt>
+              <dd>Handling, storage and transport information for each product.</dd>
+            </div>
+            <div class="row">
+              <dt>Lot traceability</dt>
+              <dd>A lot number on every label, linked back to the batch record.</dd>
+            </div>
+          </dl>
+          <div class="coa" aria-label="Specimen Certificate of Analysis">
+            <div class="coa-head">
+              <div>
+                <p class="mono">Sozo Chemicals</p>
+                <p class="coa-title">Certificate of Analysis</p>
+              </div>
+              <p class="stamp mono">Specimen</p>
+            </div>
+            <dl class="coa-meta">
+              <div><dt class="mono">Product</dt><dd>Example product</dd></div>
+              <div><dt class="mono">Lot no.</dt><dd>SZ-2610-014</dd></div>
+              <div><dt class="mono">Manufactured</dt><dd>October 2026</dd></div>
+              <div><dt class="mono">Pack size</dt><dd>1 kg</dd></div>
+            </dl>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th class="mono" scope="col">Test</th><th class="mono" scope="col">Specification</th><th class="mono" scope="col">Result</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Appearance</td><td>White crystalline powder</td><td>Conforms</td></tr>
+                  <tr><td>Identity</td><td>Matches reference</td><td>Conforms</td></tr>
+                  <tr><td>Assay</td><td>≥ 99.0 %</td><td>99.6 %</td></tr>
+                  <tr><td>Loss on drying</td><td>≤ 0.5 %</td><td>0.18 %</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="coa-note">Example values that show the format. This is not a product specification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ruled" id="shipping">
+    <div class="wrap split">
+      <p class="label mono">Shipping</p>
+      <div class="body">
+        <h2>Made in India. Delivered to your door.</h2>
+        <p class="lede">Orders ship directly from where they are made, packed for the journey and tracked until they arrive.</p>
+        <dl class="rows rows-wide body-block">
+          <div class="row">
+            <dt>Within India</dt>
+            <dd>Tracked courier delivery to addresses across the country.</dd>
+          </div>
+          <div class="row">
+            <dt>Export</dt>
+            <dd>International shipments with a commercial invoice, packing list and product documents.</dd>
+          </div>
+          <div class="row">
+            <dt>Packaging</dt>
+            <dd>Sealed, labelled packs, sized to the order and protected for transit.</dd>
+          </div>
+          <div class="row">
+            <dt>Lead time</dt>
+            <dd>Confirmed in writing with your quote, before you commit.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-copy">
+        <p class="label mono">Contact</p>
+        <h2>Tell us what you need.</h2>
+        <p class="lede">Send the product name or CAS number, the quantity and where it is going. We reply with a price, pack size and lead time.</p>
+        <p class="email-line">
+          <span class="mono">Email</span>
+          <span class="addr" id="email-addr">hello@sozo.cc</span>
+          <button class="link-btn" id="copy-email" type="button">Copy address</button>
+          <span class="status" id="email-status" role="status" aria-live="polite"></span>
+        </p>
+      </div>
+      <div class="contact-form">
+        <form class="form" id="enquiry-form">
+          <div class="field">
+            <label class="mono" for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label class="mono" for="f-company">Company</label>
+            <input id="f-company" name="company" type="text" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label class="mono" for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label class="mono" for="f-country">Delivery country</label>
+            <input id="f-country" name="country" type="text" autocomplete="country-name" placeholder="India">
+          </div>
+          <div class="field">
+            <label class="mono" for="f-product">Product or CAS number</label>
+            <input id="f-product" name="product" type="text" required>
+          </div>
+          <div class="field">
+            <label class="mono" for="f-quantity">Quantity</label>
+            <input id="f-quantity" name="quantity" type="text" placeholder="e.g. 5 kg">
+          </div>
+          <div class="field field-wide">
+            <label class="mono" for="f-notes">Grade, purity or anything else</label>
+            <textarea id="f-notes" name="notes" rows="4"></textarea>
+          </div>
+          <div class="form-foot">
+            <button class="btn btn-primary" type="submit">Prepare enquiry</button>
+            <p>This writes the email for you to send. Nothing is submitted from this page.</p>
+          </div>
+        </form>
+        <div class="enquiry-out" id="enquiry-out" hidden>
+          <h3 id="enquiry-heading" tabindex="-1">Your enquiry is ready to send</h3>
+          <p>Copy it and email it to <span class="addr">hello@sozo.cc</span>.</p>
+          <textarea id="enquiry-text" rows="11" readonly aria-labelledby="enquiry-heading"></textarea>
+          <div class="out-actions">
+            <button class="btn btn-primary" id="copy-enquiry" type="button">Copy enquiry</button>
+            <a class="btn btn-ghost" id="mail-enquiry" href="mailto:hello@sozo.cc">Open in email app</a>
+            <span class="status" id="enquiry-status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-row">
+      <a class="wordmark" href="#top" aria-label="Sozo Chemicals, back to top">
+        <svg viewBox="0 0 28 28" aria-hidden="true">
+          <polygon class="wm-ring" points="14,3 23.5,8.5 23.5,19.5 14,25 4.5,19.5 4.5,8.5"/>
+          <line class="wm-ring" x1="8.6" y1="10.8" x2="8.6" y2="17.2"/>
+          <circle class="wm-dot" cx="23.5" cy="8.5" r="3.6"/>
+        </svg>
+        <span class="wm-name">Sozo</span>
+        <span class="wm-sub mono">Chemicals</span>
+      </a>
+      <nav class="footer-nav" aria-label="Footer">
+        <a class="nav-link" href="#make">What we make</a>
+        <a class="nav-link" href="#process">How it works</a>
+        <a class="nav-link" href="#quality">Quality</a>
+        <a class="nav-link" href="#shipping">Shipping</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 Sozo Chemicals. Specialty chemicals, manufactured in India.</span>
+      <span class="mono">sozo.cc</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var EMAIL = 'hello@sozo.cc';
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ----- menu ----- */
+  var toggle = document.getElementById('menu-toggle');
+  var nav = document.getElementById('site-nav');
+  function setMenu(open) {
+    nav.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.textContent = open ? 'Close' : 'Menu';
+  }
+  toggle.addEventListener('click', function () {
+    setMenu(!nav.classList.contains('is-open'));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setMenu(false);
+  });
+
+  /* ----- in-page links ----- */
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!link) return;
+    var target = document.getElementById(link.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    setMenu(false);
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
+
+  /* ----- chromatogram -----
+     x: retention time 0 to 12 min. y: detector response relative to the product peak (0 to 100). */
+  var T_MAX = 12;
+  var MAIN = { t: 9.4, h: 100, left: 0.15, right: 0.24 };
+  var PEAKS = [
+    { t: 2.7, h: 3.4, left: 0.09, right: 0.13 },
+    { t: 5.3, h: 6.0, left: 0.10, right: 0.15 },
+    MAIN,
+    { t: 10.9, h: 2.2, left: 0.10, right: 0.14 }
+  ];
+  function response(t) {
+    var sum = 0;
+    for (var i = 0; i < PEAKS.length; i++) {
+      var p = PEAKS[i];
+      var s = t < p.t ? p.left : p.right;
+      sum += p.h * Math.exp(-((t - p.t) * (t - p.t)) / (2 * s * s));
+    }
+    return sum;
+  }
+  var fig = document.getElementById('trace');
+  var svg = document.getElementById('trace-svg');
+  var lastW = 0, lastH = 0;
+  function renderTrace() {
+    var W = Math.round(fig.clientWidth), H = Math.round(fig.clientHeight);
+    if (!W || !H || (W === lastW && H === lastH)) return;
+    lastW = W; lastH = H;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var axisY = H - 30;
+    var baseY = axisY - 14;
+    var topY = Math.max(28, Math.round(H * 0.14));
+    function x(t) { return t / T_MAX * W; }
+    function y(r) { return baseY - r / 100 * (baseY - topY); }
+    var n = Math.round(W * 1.5), d = '';
+    for (var i = 0; i <= n; i++) {
+      var t = T_MAX * i / n;
+      d += (i ? 'L' : 'M') + x(t).toFixed(1) + ' ' + y(response(t)).toFixed(1);
+    }
+    document.getElementById('tr-line').setAttribute('d', d);
+    document.getElementById('tr-area').setAttribute('d', d + 'L' + W + ' ' + baseY + 'L0 ' + baseY + 'Z');
+    var axis = document.getElementById('tr-axis');
+    axis.setAttribute('x1', 0); axis.setAttribute('x2', W);
+    axis.setAttribute('y1', axisY); axis.setAttribute('y2', axisY);
+    var ticks = '';
+    for (var m = 0; m <= T_MAX; m += 2) {
+      var tx = Math.min(W - 0.75, Math.max(0.75, x(m)));
+      var anchor = m === 0 ? 'start' : (m === T_MAX ? 'end' : 'middle');
+      var lx = m === 0 ? 0 : (m === T_MAX ? W : tx);
+      ticks += '<line class="tr-tick" x1="' + tx + '" y1="' + axisY + '" x2="' + tx + '" y2="' + (axisY + 6) + '"/>' +
+               '<text class="tr-num" x="' + lx + '" y="' + (axisY + 21) + '" text-anchor="' + anchor + '">' +
+               (m === T_MAX ? m + ' min' : m) + '</text>';
+    }
+    document.getElementById('tr-ticks').innerHTML = ticks;
+    var dot = document.getElementById('tr-dot');
+    dot.setAttribute('cx', x(MAIN.t).toFixed(1)); dot.setAttribute('cy', y(MAIN.h).toFixed(1));
+    var label = document.getElementById('tr-label');
+    label.setAttribute('x', (x(MAIN.t) - 13).toFixed(1)); label.setAttribute('y', (y(MAIN.h) + 4).toFixed(1));
+  }
+  renderTrace();
+  if (!reduceMotion) {
+    fig.classList.add('is-drawing');
+    window.setTimeout(function () { fig.classList.remove('is-drawing'); }, 2600);
+  }
+  if (window.ResizeObserver) {
+    new ResizeObserver(renderTrace).observe(fig);
+  } else {
+    window.addEventListener('resize', renderTrace);
+  }
+
+  /* ----- copy helpers ----- */
+  function selectNode(node) {
+    if (node.select) { node.focus(); node.select(); return; }
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  function copyText(text, sourceNode, statusNode, doneMessage) {
+    function fallback() {
+      selectNode(sourceNode);
+      statusNode.textContent = 'Selected. Press Ctrl+C or ⌘C to copy.';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        statusNode.textContent = doneMessage;
+      }, fallback);
+    } catch (err) {
+      fallback();
+    }
+  }
+  document.getElementById('copy-email').addEventListener('click', function () {
+    copyText(EMAIL, document.getElementById('email-addr'), document.getElementById('email-status'), 'Address copied');
+  });
+
+  /* ----- enquiry form ----- */
+  var form = document.getElementById('enquiry-form');
+  var out = document.getElementById('enquiry-out');
+  var outText = document.getElementById('enquiry-text');
+  function val(id) { return document.getElementById(id).value.trim(); }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var product = val('f-product');
+    var lines = [
+      'Hello Sozo Chemicals,',
+      '',
+      'I would like a quote for the following.',
+      '',
+      'Product or CAS number: ' + product,
+      'Quantity: ' + (val('f-quantity') || 'To be discussed'),
+      'Delivery country: ' + (val('f-country') || 'Not given')
+    ];
+    if (val('f-notes')) { lines.push('', 'Notes:', val('f-notes')); }
+    lines.push('', 'Regards,', val('f-name'));
+    if (val('f-company')) lines.push(val('f-company'));
+    lines.push(val('f-email'));
+    var message = lines.join('\n');
+    outText.value = message;
+    document.getElementById('mail-enquiry').href = 'mailto:' + EMAIL +
+      '?subject=' + encodeURIComponent('Enquiry: ' + product) +
+      '&body=' + encodeURIComponent(message);
+    document.getElementById('enquiry-status').textContent = '';
+    out.hidden = false;
+    out.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    document.getElementById('enquiry-heading').focus({ preventScroll: true });
+  });
+  document.getElementById('copy-enquiry').addEventListener('click', function () {
+    copyText(outText.value, outText, document.getElementById('enquiry-status'), 'Enquiry copied');
+  });
+})();
+</script>
+
+</body></html>
